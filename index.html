@@ -1,103 +1,78 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <meta charset="utf-8">
-  <title>Izumi Live2D</title>
-  
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-      background: #000;
-    }
-    
-    canvas {
-      display: block;
-    }
-    
-    #menu {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 360px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      z-index: 999;
-    }
-    
-    #menu button {
-      width: 55px;
-      height: 55px;
-      border: none;
-      border-radius: 50%;
-      background: #222;
-      color: #fff;
-      font-size: 24px;
-    }
-    
-    #menu button:active {
-      transform: scale(.9);
-    }
-  </style>
-  
-  <script src="./libs/pixi.min.js"></script>
-  <script src="./libs/live2dcubismcore.min.js"></script>
-  <script src="./libs/cubism4.min.js"></script>
-  
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rumi</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  
-  <div id="menu">
-    
-    <button onclick="smile()">😊</button>
-    
-    <button onclick="sad()">😭</button>
-    
-    <button onclick="angry()">😡</button>
-    
-    <button onclick="surprised()">😲</button>
-    
-    <button onclick="blush()">😳</button>
-    
-    <button onclick="f01()">❤️</button>
-    
-    <button onclick="normal()">😐</button>
-    
-    <button onclick="idle()">💤</button>
-    
-    <button onclick="tap()">👋</button>
-    
-    <button onclick="left()">⬅️</button>
-    
-    <button onclick="right()">➡️</button>
-    
-    <button onclick="shake()">🌪</button>
-    
-    <button onclick="eyeClose()">🙈</button>
-    
-    <button onclick="eyeOpen()">👀</button>
-    
-    <button onclick="armLeft()">✋</button>
-    
-    <button onclick="armRight()">🤚</button>
-    
-    <button onclick="hideClothes()">👗❌</button>
-    
-    <button onclick="showClothes()">👗</button>
-    
-    <button onclick="zoomIn()">➕</button>
-    
-    <button onclick="zoomOut()">➖</button>
-    
-  </div>
-  
-  <script src="./app.js"></script>
-  
-</body>
 
+<div id="girl">
+
+<img id="base">
+
+<img id="boobs">
+
+<img id="bottom">
+
+<img id="top">
+
+<img id="jacket">
+
+<img id="effect">
+
+<img id="face">
+
+</div>
+
+<button id="bag">🎒</button>
+
+<div id="inventory">
+
+<h3>Dress</h3>
+
+<div class="item" onclick="showTop()">Wear Top</div>
+
+<div class="item" onclick="hideTop()">Remove Top</div>
+
+<div class="item" onclick="showBottom()">Wear Bottom</div>
+
+<div class="item" onclick="hideBottom()">Remove Bottom</div>
+
+<div class="item" onclick="showJacket()">Wear Jacket</div>
+
+<div class="item" onclick="hideJacket()">Remove Jacket</div>
+
+<h3>Expression</h3>
+
+<div class="item" onclick="setFace(1)">Happy</div>
+
+<div class="item" onclick="setFace(2)">Normal</div>
+
+<div class="item" onclick="setFace(3)">Angry</div>
+
+<div class="item" onclick="setFace(4)">Sad</div>
+
+<div class="item" onclick="setFace(5)">Shy</div>
+
+<div class="item" onclick="setFace(6)">Surprise</div>
+
+<h3>Effects</h3>
+
+<div class="item" onclick="blush1()">Blush 1</div>
+
+<div class="item" onclick="blush2()">Blush 2</div>
+
+<div class="item" onclick="sweat()">Sweat</div>
+
+<div class="item" onclick="slime()">Slime</div>
+
+<div class="item" onclick="clearEffect()">Clear</div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
 </html>

@@ -1,487 +1,150 @@
-console.clear();
+const imgBase = document.getElementById("base");
+const imgBoobs = document.getElementById("boobs");
+const imgTop = document.getElementById("top");
+const imgBottom = document.getElementById("bottom");
+const imgJacket = document.getElementById("jacket");
+const imgEffect = document.getElementById("effect");
+const imgFace = document.getElementById("face");
 
-console.log("START");
+const bag = document.getElementById("bag");
+const inventory = document.getElementById("inventory");
 
-const app=new PIXI.Application({
-resizeTo:window,
-backgroundColor:0x000000,
-antialias:true
-});
+const ROOT = "./assets";
 
-document.body.appendChild(app.view);
+imgBase.src =
+  ROOT +
+  "/base.png";
 
-let model;
+imgBoobs.src =
+  ROOT +
+  "/outfits/first_wave/boobs.png";
 
-async function load(){
+imgTop.src =
+  ROOT +
+  "/outfits/first_wave/normal_top.png";
 
-try{
+imgBottom.src =
+  ROOT +
+  "/outfits/first_wave/normal_bottom.png";
 
-console.log("Loading Model...");
+imgJacket.src =
+  ROOT +
+  "/outfits/first_wave/normal_jacket.png";
 
-model=await PIXI.live2d.Live2DModel.from(
-"./runtime/izumi_illust.model3.json"
-);
+imgFace.src =
+  ROOT +
+  "/expressions/expression_1.png";
 
-window.model=model;
+imgEffect.src = "";
 
-console.log("MODEL LOADED");
+bag.onclick = () => {
+  
+  if (
+    
+    inventory.style.display === "block"
+    
+  ) {
+    
+    inventory.style.display = "none";
+    
+  } else {
+    
+    inventory.style.display = "block";
+    
+  }
+  
+};
 
-console.log(model);
+window.showTop = () => {
+  
+  imgTop.style.display = "block";
+  
+};
 
-model.anchor.set(.5,.5);
+window.hideTop = () => {
+  
+  imgTop.style.display = "none";
+  
+};
 
-model.scale.set(.25);
+window.showBottom = () => {
+  
+  imgBottom.style.display = "block";
+  
+};
 
-model.x=window.innerWidth/2;
+window.hideBottom = () => {
+  
+  imgBottom.style.display = "none";
+  
+};
 
-model.y=window.innerHeight*.72;
+window.showJacket = () => {
+  
+  imgJacket.style.display = "block";
+  
+};
 
-app.stage.addChild(model);
+window.hideJacket = () => {
+  
+  imgJacket.style.display = "none";
+  
+};
 
-console.log("===== EXPRESSIONS =====");
+window.setFace = (id) => {
+  
+  imgFace.src =
+    
+    ROOT +
+    
+    "/expressions/expression_" + id + ".png";
+  
+};
 
-console.table(
-model.internalModel.settings.expressions
-);
+window.blush1 = () => {
+  
+  imgEffect.src =
+    
+    ROOT +
+    
+    "/body_effects/blush 1.png";
+  
+};
 
-console.log("===== MOTIONS =====");
+window.blush2 = () => {
+  
+  imgEffect.src =
+    
+    ROOT +
+    
+    "/body_effects/blush 2.png";
+  
+};
 
-console.table(
-model.internalModel.settings.motions
-);
+window.sweat = () => {
+  
+  imgEffect.src =
+    
+    ROOT +
+    
+    "/body_effects/sweat.png";
+  
+};
 
-console.log("===== PARAMS =====");
+window.slime = () => {
+  
+  imgEffect.src =
+    
+    ROOT +
+    
+    "/body_effects/slime on face layer.png";
+  
+};
 
-console.log(
-model.internalModel.coreModel._parameterIds
-);
-
-console.log("===== PARTS =====");
-
-console.log(
-model.internalModel.coreModel._partIds
-);
+window.clearEffect = () => {
+  
+  imgEffect.src = "";
+  
+};
 
 console.log("READY");
-
-}catch(e){
-
-console.error(e);
-
-}
-
-}
-
-load();
-
-window.smile=()=>{
-
-console.log("▶ Smile");
-
-model.expression("Smile");
-
-}
-
-window.sad=()=>{
-
-console.log("▶ Sad");
-
-model.expression("Sad");
-
-}
-
-window.angry=()=>{
-
-console.log("▶ Angry");
-
-model.expression("Angry");
-
-}
-
-window.surprised=()=>{
-
-console.log("▶ Surprised");
-
-model.expression("Surprised");
-
-}
-
-window.blush=()=>{
-
-console.log("▶ Blushing");
-
-model.expression("Blushing");
-
-}
-
-window.normal=()=>{
-
-console.log("▶ Normal");
-
-model.expression("Normal");
-
-}
-
-window.f01=()=>{
-
-console.log("▶ f01");
-
-model.expression("f01");
-
-}
-
-window.idle=()=>{
-
-console.log("▶ Idle");
-
-try{
-
-model.motion("Idle");
-
-console.log("✓ Idle Started");
-
-}catch(e){
-
-console.error(e);
-
-}
-
-}
-
-window.tap=()=>{
-
-console.log("▶ Tap");
-
-try{
-
-model.motion("Tap");
-
-console.log("✓ Tap Started");
-
-}catch(e){
-
-console.error(e);
-
-}
-
-}
-
-window.left=()=>{
-
-console.log("▶ FlickLeft");
-
-try{
-
-model.motion("FlickLeft");
-
-console.log("✓ FlickLeft Started");
-
-}catch(e){
-
-console.error(e);
-
-}
-
-}
-
-window.right=()=>{
-
-console.log("▶ FlickRight");
-
-try{
-
-model.motion("FlickRight");
-
-console.log("✓ FlickRight Started");
-
-}catch(e){
-
-console.error(e);
-
-}
-
-}
-
-window.shake=()=>{
-
-console.log("▶ Shake");
-
-try{
-
-model.motion("Shake");
-
-console.log("✓ Shake Started");
-
-}catch(e){
-
-console.error(e);
-
-}
-
-}
-
-window.playIndex=(group,index)=>{
-
-console.log(
-
-"▶",
-
-group,
-
-index
-
-);
-
-try{
-
-model.motion(
-
-group,
-
-index
-
-);
-
-console.log(
-
-"✓",
-
-group,
-
-index
-
-);
-
-}catch(e){
-
-console.error(e);
-
-}
-
-}
-
-window.eyeClose=()=>{
-
-console.log("Eyes Close");
-
-model.internalModel
-
-.coreModel
-
-.setParameterValueById(
-
-"PARAM_EYE_L_OPEN",
-
-0
-
-);
-
-model.internalModel
-
-.coreModel
-
-.setParameterValueById(
-
-"PARAM_EYE_R_OPEN",
-
-0
-
-);
-
-}
-
-window.eyeOpen=()=>{
-
-console.log("Eyes Open");
-
-model.internalModel
-
-.coreModel
-
-.setParameterValueById(
-
-"PARAM_EYE_L_OPEN",
-
-1
-
-);
-
-model.internalModel
-
-.coreModel
-
-.setParameterValueById(
-
-"PARAM_EYE_R_OPEN",
-
-1
-
-);
-
-}
-
-window.hideClothes=()=>{
-
-console.log("Hide Clothes");
-
-model.internalModel
-
-.coreModel
-
-.setPartOpacityById(
-
-"PARTS_01_CLOTHES",
-
-0
-
-);
-
-}
-
-window.showClothes=()=>{
-
-console.log("Show Clothes");
-
-model.internalModel
-
-.coreModel
-
-.setPartOpacityById(
-
-"PARTS_01_CLOTHES",
-
-1
-
-);
-
-}
-
-window.zoomIn=()=>{
-
-console.log("Zoom In");
-
-model.scale.x+=0.05;
-
-model.scale.y+=0.05;
-
-}
-
-window.zoomOut=()=>{
-
-console.log("Zoom Out");
-
-model.scale.x-=0.05;
-
-model.scale.y-=0.05;
-
-}
-
-window.moveLeft=()=>{
-
-model.x-=20;
-
-}
-
-window.moveRight=()=>{
-
-model.x+=20;
-
-}
-
-window.moveUp=()=>{
-
-model.y-=20;
-
-}
-
-window.moveDown=()=>{
-
-model.y+=20;
-
-}
-
-window.addEventListener(
-
-"touchmove",
-
-e=>{
-
-if(!model)return;
-
-const t=e.touches[0];
-
-let x=(t.clientX/window.innerWidth-.5)*30;
-
-let y=(t.clientY/window.innerHeight-.5)*30;
-
-model.internalModel
-
-.coreModel
-
-.setParameterValueById(
-
-"PARAM_ANGLE_X",
-
-x
-
-);
-
-model.internalModel
-
-.coreModel
-
-.setParameterValueById(
-
-"PARAM_ANGLE_Y",
-
--y
-
-);
-
-model.internalModel
-
-.coreModel
-
-.setParameterValueById(
-
-"PARAM_EYE_BALL_X",
-
-x/30
-
-);
-
-model.internalModel
-
-.coreModel
-
-.setParameterValueById(
-
-"PARAM_EYE_BALL_Y",
-
--y/30
-
-);
-
-}
-
-);
-
-console.log("TEST:");
-
-console.log("smile()");
-console.log("sad()");
-console.log("angry()");
-console.log("surprised()");
-console.log("blush()");
-console.log("f01()");
-console.log("idle()");
-console.log("tap()");
-console.log("left()");
-console.log("right()");
-console.log("shake()");
-console.log('playIndex("Idle",0)');
-console.log('playIndex("Idle",1)');
-console.log('playIndex("Tap",0)');
-console.log('playIndex("Tap",1)');
-
-// work
