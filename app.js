@@ -1,150 +1,378 @@
-const imgBase = document.getElementById("base");
-const imgBoobs = document.getElementById("boobs");
-const imgTop = document.getElementById("top");
-const imgBottom = document.getElementById("bottom");
-const imgJacket = document.getElementById("jacket");
-const imgEffect = document.getElementById("effect");
-const imgFace = document.getElementById("face");
+import * as THREE from "https://esm.sh/three@0.178";
+import {OrbitControls} from "https://esm.sh/three@0.178/examples/jsm/controls/OrbitControls.js";
+import {GLTFLoader} from "https://esm.sh/three@0.178/examples/jsm/loaders/GLTFLoader.js";
 
-const bag = document.getElementById("bag");
-const inventory = document.getElementById("inventory");
+const scene=new THREE.Scene();
+scene.background=new THREE.Color("#111111");
 
-const ROOT = "./assets";
+const camera=new THREE.PerspectiveCamera(
+45,
+window.innerWidth/window.innerHeight,
+0.1,
+100
+);
 
-imgBase.src =
-  ROOT +
-  "/base.png";
+camera.position.set(0,1.2,2);
 
-imgBoobs.src =
-  ROOT +
-  "/outfits/first_wave/boobs.png";
+const renderer=new THREE.WebGLRenderer({
+antialias:true
+});
 
-imgTop.src =
-  ROOT +
-  "/outfits/first_wave/normal_top.png";
+renderer.setSize(
+window.innerWidth,
+window.innerHeight
+);
 
-imgBottom.src =
-  ROOT +
-  "/outfits/first_wave/normal_bottom.png";
+renderer.setPixelRatio(
+window.devicePixelRatio
+);
 
-imgJacket.src =
-  ROOT +
-  "/outfits/first_wave/normal_jacket.png";
+document.body.appendChild(
+renderer.domElement
+);
 
-imgFace.src =
-  ROOT +
-  "/expressions/expression_1.png";
+const controls=new OrbitControls(
+camera,
+renderer.domElement
+);
 
-imgEffect.src = "";
+controls.enablePan=false;
+controls.enableDamping=true;
+controls.dampingFactor=0.1;
+controls.minDistance=1;
+controls.maxDistance=4;
+controls.target.set(0,0.8,0);
 
-bag.onclick = () => {
-  
-  if (
-    
-    inventory.style.display === "block"
-    
-  ) {
-    
-    inventory.style.display = "none";
-    
-  } else {
-    
-    inventory.style.display = "block";
-    
-  }
-  
+const hemi=new THREE.HemisphereLight(
+0xffffff,
+0x444444,
+2
+);
+
+scene.add(hemi);
+
+const dir=new THREE.DirectionalLight(
+0xffffff,
+2
+);
+
+dir.position.set(
+2,
+5,
+2
+);
+
+scene.add(dir);
+
+const floor=new THREE.Mesh(
+
+new THREE.CircleGeometry(
+5,
+64
+),
+
+new THREE.MeshStandardMaterial({
+
+color:"#222222"
+
+})
+
+);
+
+floor.rotation.x=-Math.PI/2;
+
+scene.add(floor);
+
+let girl;
+
+window.bodyMesh=null;
+
+const texLoader=new THREE.TextureLoader();
+
+const loader=new GLTFLoader();
+
+loader.load(
+
+"/assets/Anime-Girl.glb",
+
+(gltf)=>{
+
+girl=gltf.scene;
+
+console.log("MODEL LOADED");
+
+girl.traverse((obj)=>{
+
+if(obj.isMesh){
+
+console.log(
+
+"Mesh:",
+
+obj.name
+
+);
+
+console.log(
+
+obj.name,
+
+obj.material
+
+);
+
+if(obj.name==="Body"){
+
+window.bodyMesh=obj;
+
+console.log(
+
+"BODY FOUND",
+
+bodyMesh
+
+);
+
+}
+
+}
+
+});
+
+const box=new THREE.Box3()
+
+.setFromObject(
+
+girl
+
+);
+
+const center=
+
+box.getCenter(
+
+new THREE.Vector3()
+
+);
+
+const min=
+
+box.min;
+
+girl.position.x-=center.x;
+
+girl.position.z-=center.z;
+
+girl.position.y-=min.y;
+
+scene.add(
+
+girl
+
+);
+
+},
+
+(xhr)=>{
+
+console.log(
+
+Math.round(
+
+xhr.loaded/
+
+xhr.total
+
+*100
+
+)
+
++"%"
+
+);
+
+},
+
+(err)=>{
+
+console.error(err);
+
+}
+
+);
+
+window.hideMesh=(name)=>{
+
+if(!girl)return;
+
+girl.traverse((obj)=>{
+
+if(
+
+obj.isMesh
+
+&&
+
+obj.name===name
+
+){
+
+obj.visible=false;
+
+}
+
+});
+
 };
 
-window.showTop = () => {
-  
-  imgTop.style.display = "block";
-  
+window.showMesh=(name)=>{
+
+if(!girl)return;
+
+girl.traverse((obj)=>{
+
+if(
+
+obj.isMesh
+
+&&
+
+obj.name===name
+
+){
+
+obj.visible=true;
+
+}
+
+});
+
 };
 
-window.hideTop = () => {
-  
-  imgTop.style.display = "none";
-  
+window.naked=()=>{
+
+hideMesh("T-Shirt");
+
+hideMesh("Jean_shorts");
+
+hideMesh("Low-heeled_mules");
+
+hideMesh("Shoulder_Bag_1");
+
+hideMesh("Headband");
+
 };
 
-window.showBottom = () => {
-  
-  imgBottom.style.display = "block";
-  
+window.casual=()=>{
+
+showMesh("T-Shirt");
+
+showMesh("Jean_shorts");
+
+showMesh("Low-heeled_mules");
+
+showMesh("Shoulder_Bag_1");
+
+showMesh("Headband");
+
 };
 
-window.hideBottom = () => {
-  
-  imgBottom.style.display = "none";
-  
+window.changeBody=(path)=>{
+
+if(!bodyMesh){
+
+console.log(
+
+"Body not found"
+
+);
+
+return;
+
+}
+
+texLoader.load(
+
+path,
+
+(tex)=>{
+
+tex.flipY=false;
+
+tex.colorSpace=
+
+THREE.SRGBColorSpace;
+
+bodyMesh.material.map=tex;
+
+bodyMesh.material.needsUpdate=true;
+
+console.log(
+
+"Changed:",
+
+path
+
+);
+
+},
+
+undefined,
+
+(err)=>{
+
+console.error(err);
+
+}
+
+);
+
 };
 
-window.showJacket = () => {
-  
-  imgJacket.style.display = "block";
-  
-};
+window.addEventListener(
 
-window.hideJacket = () => {
-  
-  imgJacket.style.display = "none";
-  
-};
+"resize",
 
-window.setFace = (id) => {
-  
-  imgFace.src =
-    
-    ROOT +
-    
-    "/expressions/expression_" + id + ".png";
-  
-};
+()=>{
 
-window.blush1 = () => {
-  
-  imgEffect.src =
-    
-    ROOT +
-    
-    "/body_effects/blush 1.png";
-  
-};
+camera.aspect=
 
-window.blush2 = () => {
-  
-  imgEffect.src =
-    
-    ROOT +
-    
-    "/body_effects/blush 2.png";
-  
-};
+window.innerWidth/
 
-window.sweat = () => {
-  
-  imgEffect.src =
-    
-    ROOT +
-    
-    "/body_effects/sweat.png";
-  
-};
+window.innerHeight;
 
-window.slime = () => {
-  
-  imgEffect.src =
-    
-    ROOT +
-    
-    "/body_effects/slime on face layer.png";
-  
-};
+camera.updateProjectionMatrix();
 
-window.clearEffect = () => {
-  
-  imgEffect.src = "";
-  
-};
+renderer.setSize(
 
-console.log("READY");
+window.innerWidth,
+
+window.innerHeight
+
+);
+
+}
+
+);
+
+function animate(){
+
+requestAnimationFrame(
+
+animate
+
+);
+
+controls.update();
+
+renderer.render(
+
+scene,
+
+camera
+
+);
+
+}
+
+animate();
